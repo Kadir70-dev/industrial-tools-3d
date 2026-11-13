@@ -1,7 +1,7 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { ContactShadows, OrbitControls, RoundedBox } from '@react-three/drei';
+import { ContactShadows, Html, OrbitControls, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 
 function CameraMotion({interactive}:{interactive:boolean}) {
@@ -18,7 +18,17 @@ function Framing({ refAspect=1.15 }:{refAspect?:number}) {
  return null;
 }
 
-function Tool({reducedMotion}:{reducedMotion:boolean}) {
+// Detail point anchored to the model (local coordinates) so it follows the rotating drill.
+export type Hotspot = { id: string; index: string; label: string; detail: string; position: [number, number, number] };
+type HotspotProps = { hotspots?: Hotspot[]; activeHotspot?: string; onHotspot?: (id: string) => void };
+
+function Hotspots({ hotspots=[], activeHotspot, onHotspot }: HotspotProps) {
+ return <>{hotspots.map(h=><Html key={h.id} position={h.position} occlude zIndexRange={[3,1]}>
+  <button className={`hotspot hotspot--tracked${activeHotspot===h.id?' is-active':''}`} onClick={()=>onHotspot?.(h.id)} aria-label={h.label} aria-pressed={activeHotspot===h.id}><i/><span>{activeHotspot===h.id?h.detail:h.index}</span></button>
+ </Html>)}</>;
+}
+
+function Tool({reducedMotion, ...hotspotProps}:{reducedMotion:boolean} & HotspotProps) {
   const root = useRef<THREE.Group>(null!);
   useFrame((state, delta) => { if (root.current && !reducedMotion) root.current.rotation.y += delta * 0.085; });
   const orange = '#ef6c28'; const graphite = '#252b2d'; const rubber = '#141819'; const metal = '#9ca5a7';
@@ -51,10 +61,11 @@ function Tool({reducedMotion}:{reducedMotion:boolean}) {
     {/* subtle side badge */}
     <RoundedBox args={[.36,.14,.025]} radius={.025} smoothness={2} position={[-.13,.4,.43]}><meshStandardMaterial color="#f4f1eb" roughness={.4}/></RoundedBox>
     <mesh position={[-.13,.4,.448]}><planeGeometry args={[.2,.045]}/><meshBasicMaterial color="#202526"/></mesh>
+    <Hotspots {...hotspotProps}/>
   </group>;
 }
 
-export function DrillModel({ interactive=false, scale=1 }: {interactive?:boolean; scale?:number}) {
+export function DrillModel({ interactive=false, scale=1, ...hotspotProps }: {interactive?:boolean; scale?:number} & HotspotProps) {
  const [reducedMotion,setReducedMotion]=useState(false);
  // Stop the render loop while the canvas is off screen.
  const wrap=useRef<HTMLDivElement>(null); const [visible,setVisible]=useState(true);
@@ -62,7 +73,7 @@ export function DrillModel({ interactive=false, scale=1 }: {interactive?:boolean
  useEffect(()=>{const media=window.matchMedia('(prefers-reduced-motion: reduce)'); const update=()=>setReducedMotion(media.matches); update(); media.addEventListener('change',update); return()=>media.removeEventListener('change',update);},[]);
  return <div ref={wrap} style={{width:'100%',height:'100%'}}><Canvas frameloop={visible?'always':'never'} fallback={<div className="drill-fallback" role="img" aria-label="Static cordless drill illustration"><i className="drill-fallback__body"/><i className="drill-fallback__grip"/><i className="drill-fallback__battery"/><i className="drill-fallback__chuck"/><i className="drill-fallback__bit"/></div>} shadows dpr={[1,1.7]} camera={{position:[3.25,2.2,4.2],fov:37}} gl={{antialias:true,alpha:true,powerPreference:'high-performance'}}>
   <CameraMotion interactive={interactive}/><Framing/><ambientLight intensity={.68}/><directionalLight position={[4,6,5]} intensity={3.2} castShadow shadow-mapSize={[1024,1024]}/><spotLight position={[-4,3,-2]} intensity={16} angle={.4} penumbra={1} color="#ef6c28"/>
-  <Suspense fallback={null}><group scale={scale}><Tool reducedMotion={reducedMotion}/></group><ContactShadows position={[0,-1.46,0]} opacity={.32} scale={5} blur={2.6} far={3}/></Suspense>
+  <Suspense fallback={null}><group scale={scale}><Tool reducedMotion={reducedMotion} {...hotspotProps}/></group><ContactShadows position={[0,-1.46,0]} opacity={.32} scale={5} blur={2.6} far={3}/></Suspense>
   <OrbitControls makeDefault enablePan={false} enableZoom={interactive} minDistance={2.7} maxDistance={7} minPolarAngle={.55} maxPolarAngle={2.3} autoRotate={!interactive&&!reducedMotion} autoRotateSpeed={.7} enableDamping dampingFactor={.08}/>
  </Canvas></div>;
 }
