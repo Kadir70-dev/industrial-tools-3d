@@ -12,7 +12,7 @@ A static-friendly Next.js App Router website for the temporary ForgeWorks Indust
 4. **Interactive product collection:** eight editable demo products across seven categories; category tabs, text search, featured/name sorting, product detail modal, empty state and quote prefill.
 5. **How we deliver:** four-stage Understand → Select → Quote → Support timeline.
 6. **Business impact:** five qualitative expected-value statements; no fabricated metrics or testimonials.
-7. **Continuous gallery and contact:** duplicated seamless motion track, hover/focus/button pause, touch scroll behavior, reduced-motion stop, and browser-validated local-only enquiry form.
+7. **Continuous gallery and contact:** duplicated seamless motion track, hover/focus/button pause, touch scroll behavior, reduced-motion stop, and browser-native locally validated enquiry form.
 
 Navigation, footer, SEO metadata, modal, keyboard labels, empty states, reduced-motion styles and mobile navigation are also implemented.
 
@@ -29,7 +29,7 @@ Navigation, footer, SEO metadata, modal, keyboard labels, empty states, reduced-
 
 ## Working 3D interactions
 
-The drill is not an image. It is modeled from custom Three.js geometry: housing shells, motor casing, vent slots, clutch collar, chuck, steel bit, grip, trigger, battery, charge indicators, belt clip and small side badge. It has studio lighting, shadows, an environment map and OrbitControls. Hero viewer uses auto-rotation and zoom disabled. The featured viewer allows orbit, damping, wheel/touch zoom and three accessible detail hotspots.
+The drill is not an image. It is modeled from custom Three.js geometry: housing shells, motor casing, vent slots, clutch collar, chuck, steel bit, grip, trigger, battery, charge indicators, belt clip and small side badge. It uses ambient, directional and spot lighting, contact shadows and OrbitControls. Hero viewer uses auto-rotation and zoom disabled. The featured viewer allows orbit, damping, wheel/touch zoom and three accessible detail hotspots.
 
 ## Gallery implementation
 
@@ -42,13 +42,13 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 ## Current build/test status
 
 - Implementation complete for the requested seven modules.
-- `npm install`: passed (180 dependencies installed).
+- `npm install`: passed; dependencies and lockfile are committed.
 - `npm run typecheck`: passed.
 - `npm run build`: passed; homepage prerendered as static content.
 - Static export smoke check: passed for nine rendered content markers across the hero, challenge, solutions, catalog, process, impact, gallery, contact and brand.
 - Browser review: the preview browser rejected the local URL under its URL security policy. Desktop/mobile visual QA and screenshot capture remain outstanding.
 - Static preview server could not be started in this managed runtime because Node reported `uv_interface_addresses` system error 1; `out/` was generated successfully.
-- No deployment has been run. The target GitHub repository was confirmed empty and public, so source has not been pushed while the requested privacy setting remains unresolved.
+- Source is pushed to the public GitHub repository on `main`; no deployment has been run.
 - No backend/API is present; quote form intentionally does not send data.
 
 ## Known limitations / unfinished features
@@ -70,7 +70,7 @@ No external 3D or product photo assets are bundled. The tool visuals and drill a
 
 1. **Inspect the homepage first** at 1440×900 and 390×844. Fix any text wrapping, section rhythm, model framing or horizontal overflow before adding effects.
 2. **Improve 3D shading and proportions** in `components/DrillModel.tsx`: silhouette accuracy, bevels, chuck detail, grip texture, improved side badge, battery lock rails and soft contact shadows. Keep geometry performant and mobile quality capped.
-3. **Wire camera controls cleanly**: expose reset and zoom controls through OrbitControls refs; ensure zoom button actually changes camera distance and reset restores the initial camera/target.
+3. **Refine camera feel and framing** at desktop and mobile sizes; tune OrbitControls damping and zoom range while preserving reset to the initial camera/target.
 4. **Tune ScrollTrigger** in `components/Home.tsx` for stable cleanup, responsive refresh and reduced-motion behavior. Avoid stacking timelines on hot reload or resize.
 5. **Review responsive interaction**: prevent category tabs from trapping horizontal page scroll; verify modal focus/escape behavior and gallery touch scrolling.
 6. **Review actual browser motion**: seamless marquee edge, hover pause, keyboard focus pause, touch and reduced motion.
@@ -82,5 +82,5 @@ No external 3D or product photo assets are bundled. The tool visuals and drill a
 1. `components/DrillModel.tsx` — procedural model and OrbitControls.
 2. `components/Home.tsx` — page modules, state, GSAP and interaction wiring.
 3. `app/globals.css` — full design system and responsive behavior.
-4. `lib/products.ts` — editable demo catalogue.
+4. `lib/products.ts` and `lib/site.ts` — editable demo catalogue and brand/contact/SEO configuration.
 5. `README.md` — install, run and architecture notes.
