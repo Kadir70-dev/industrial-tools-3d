@@ -11,6 +11,13 @@ function CameraMotion({interactive}:{interactive:boolean}) {
  return null;
 }
 
+// Widen the view on narrow canvases so the full drill stays in frame (tablet/mobile).
+function Framing({ refAspect=1.15 }:{refAspect?:number}) {
+ const { camera, size }=useThree();
+ useEffect(()=>{const cam=camera as THREE.PerspectiveCamera; cam.zoom=Math.min(1,(size.width/Math.max(size.height,1))/refAspect); cam.updateProjectionMatrix();},[camera,size.width,size.height,refAspect]);
+ return null;
+}
+
 function Tool({reducedMotion}:{reducedMotion:boolean}) {
   const root = useRef<THREE.Group>(null!);
   useFrame((state, delta) => { if (root.current && !reducedMotion) root.current.rotation.y += delta * 0.085; });
@@ -49,10 +56,13 @@ function Tool({reducedMotion}:{reducedMotion:boolean}) {
 
 export function DrillModel({ interactive=false, scale=1 }: {interactive?:boolean; scale?:number}) {
  const [reducedMotion,setReducedMotion]=useState(false);
+ // Stop the render loop while the canvas is off screen.
+ const wrap=useRef<HTMLDivElement>(null); const [visible,setVisible]=useState(true);
+ useEffect(()=>{const el=wrap.current; if(!el||!('IntersectionObserver' in window))return; const io=new IntersectionObserver(([e])=>setVisible(e.isIntersecting),{rootMargin:'120px'}); io.observe(el); return()=>io.disconnect();},[]);
  useEffect(()=>{const media=window.matchMedia('(prefers-reduced-motion: reduce)'); const update=()=>setReducedMotion(media.matches); update(); media.addEventListener('change',update); return()=>media.removeEventListener('change',update);},[]);
- return <Canvas fallback={<div className="drill-fallback" role="img" aria-label="Static cordless drill illustration"><i className="drill-fallback__body"/><i className="drill-fallback__grip"/><i className="drill-fallback__battery"/><i className="drill-fallback__chuck"/><i className="drill-fallback__bit"/></div>} shadows dpr={[1,1.7]} camera={{position:[3.25,2.2,4.2],fov:37}} gl={{antialias:true,alpha:true,powerPreference:'high-performance'}}>
-  <CameraMotion interactive={interactive}/><ambientLight intensity={.68}/><directionalLight position={[4,6,5]} intensity={3.2} castShadow shadow-mapSize={[1024,1024]}/><spotLight position={[-4,3,-2]} intensity={16} angle={.4} penumbra={1} color="#ef6c28"/>
+ return <div ref={wrap} style={{width:'100%',height:'100%'}}><Canvas frameloop={visible?'always':'never'} fallback={<div className="drill-fallback" role="img" aria-label="Static cordless drill illustration"><i className="drill-fallback__body"/><i className="drill-fallback__grip"/><i className="drill-fallback__battery"/><i className="drill-fallback__chuck"/><i className="drill-fallback__bit"/></div>} shadows dpr={[1,1.7]} camera={{position:[3.25,2.2,4.2],fov:37}} gl={{antialias:true,alpha:true,powerPreference:'high-performance'}}>
+  <CameraMotion interactive={interactive}/><Framing/><ambientLight intensity={.68}/><directionalLight position={[4,6,5]} intensity={3.2} castShadow shadow-mapSize={[1024,1024]}/><spotLight position={[-4,3,-2]} intensity={16} angle={.4} penumbra={1} color="#ef6c28"/>
   <Suspense fallback={null}><group scale={scale}><Tool reducedMotion={reducedMotion}/></group><ContactShadows position={[0,-1.46,0]} opacity={.32} scale={5} blur={2.6} far={3}/></Suspense>
   <OrbitControls makeDefault enablePan={false} enableZoom={interactive} minDistance={2.7} maxDistance={7} minPolarAngle={.55} maxPolarAngle={2.3} autoRotate={!interactive&&!reducedMotion} autoRotateSpeed={.7} enableDamping dampingFactor={.08}/>
- </Canvas>;
+ </Canvas></div>;
 }

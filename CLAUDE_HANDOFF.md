@@ -46,8 +46,10 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 - `npm run typecheck`: passed.
 - `npm run build`: passed; homepage prerendered as static content.
 - Static export smoke check: passed for nine rendered content markers across the hero, challenge, solutions, catalog, process, impact, gallery, contact and brand.
-- Browser review: the preview browser rejected the local URL under its URL security policy. Desktop/mobile visual QA and screenshot capture remain outstanding.
-- Static preview server could not be started in this managed runtime because Node reported `uv_interface_addresses` system error 1; `out/` was generated successfully.
+- Visual QA (2026-11-13): headless Chromium (SwiftShader WebGL) at 1440×900, 834×1112 and 390×844. No horizontal overflow at any size. Screenshots in `docs/qa/2026-11-13/` (`before-*` = pre-fix).
+- Fixed in QA: hero footer overlapping the CTAs; hero buttons wrapping on tablet; drill cropped on narrow canvases (camera zoom now adapts to canvas aspect); stray "0" in hero spec ruler; "01 — 01" solution indexes; unrendered ↘ glyph; empty grey cells in the 5-item impact grid (desktop and mobile); missing gap at the gallery loop seam; gallery count label (06 vs 8 items); gallery pause button being undone by hover-pause; both Canvases now stop rendering while off screen.
+- Interactions verified by script: gallery hover/button pause and seamless loop width, category filter, search empty state + clear, sort, product modal + Escape, viewer hotspot, mobile menu open/close.
+- Brand config: `siteConfig.brand.code` (index prefix) and `siteConfig.featuredProductId` drive the hero/viewer labels; the invented hero coordinates were removed — `contact.location` is shown only when set.
 - Source is pushed to the public GitHub repository on `main`; no deployment has been run.
 - No backend/API is present; quote form intentionally does not send data.
 
