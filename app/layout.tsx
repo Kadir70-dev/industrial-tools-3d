@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './sections.css';
+import './tool-art.css';
 import { siteConfig } from '@/lib/site';
 export const metadata: Metadata = {
   title: `${siteConfig.brand.name} ${siteConfig.brand.division} — ${siteConfig.seo.title}`, 

@@ -1,0 +1,6 @@
+Horizontal overflow (page scrollWidth vs clientWidth; listed items sit inside intentionally scrollable chip rows):
+desktop {"sw":1440,"cw":1440,"wide":[],"canvas":2,"fallback":2} 
+tablet {"sw":834,"cw":834,"wide":["BUTTON. 922","SPAN. 899","BUTTON. 1089","SPAN. 1066"],"canvas":2,"fallback":2} 
+mobile {"sw":390,"cw":390,"wide":["BUTTON. 404","BUTTON. 575","SPAN. 558","BUTTON. 721","SPAN. 704","BUTTON. 850","SPAN. 833","BUTTON. 1005"],"canvas":2,"fallback":2} 
+
+axe-core WCAG 2 A/AA, 1440/834/390: 0 violations.

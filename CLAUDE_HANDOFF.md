@@ -1,4 +1,4 @@
-# Claude handoff — ForgeWorks Industrial
+# Claude handoff — AFRAH Alyasmeen Trading L.L.C (formerly the ForgeWorks placeholder)
 
 ## Current build
 
@@ -20,7 +20,9 @@ Navigation, footer, SEO metadata, modal, keyboard labels, empty states, reduced-
 
 - `app/page.tsx`: single homepage entry.
 - `app/layout.tsx`: metadata and global stylesheet.
-- `app/globals.css`: typography, responsive layout, visual system, CSS tool silhouettes, gallery animation and reduced-motion styles.
+- `app/globals.css`: design tokens, base type, buttons, header, hero drawing sheet and category strip.
+- `app/sections.css`: problems ledger, method plates, catalogue, inspection bay, stations, impact checklist, gallery conveyor, work-order form, footer and dialog.
+- `app/tool-art.css`: code-drawn product silhouettes, WebGL fallback drill, viewer hotspots and loader.
 - `components/Home.tsx`: client UI and interaction state; GSAP + ScrollTrigger reveal and intro animation.
 - `components/DrillModel.tsx`: client-side React Three Fiber scene using original primitive geometry and materials; Canvas auto-rotation for hero, OrbitControls for featured 360 viewer.
 - `components/ToolVisual.tsx`: reusable CSS silhouettes for category/product cards.
@@ -37,7 +39,9 @@ The drill is not an image. It is modeled from custom Three.js geometry: housing 
 
 ## CSS and motion system
 
-Palette variables live at the top of `app/globals.css`. Space Grotesk is used for display, DM Sans for body and DM Mono for technical labels. Warm ivory and deep graphite sections alternate; orange is reserved for functional emphasis. GSAP/ScrollTrigger handles entry reveals and hero intro; the hero camera subtly shifts with page scroll. CSS handles the product gallery, ticker, timeline, hover details and reduced-motion fallback.
+**Blueprint system (branch `feat/forgeworks-blueprint-redesign`, 2026-11-14).** The site reads as an engineering drawing / spec sheet rather than a marketing template: drafting paper `#ece9e2`, ink `#121210`, signal orange `#f2601e`; 0px corners, 2px ink rules, hard offset shadows, visible grids, coordinate rulers and hazard-stripe accents. Archivo (variable width axis; display at 62–75% stretch, weight 800–900) with JetBrains Mono for labels and specs. Headline accent words are ink-on-orange "tape" (`.tape`) so the brand orange never carries small or body text on paper. Small orange text uses `--signal-text` on paper and `--signal-on-ink` on dark. GSAP/ScrollTrigger handles reveals, the hero intro and the hero leader-line draw; CSS handles the gallery marquee + conveyor belt and reduced-motion fallbacks.
+
+Page architecture: spec strip → sticky table-row header (indexed nav cells, hazard-edged quote CTA) → hero drawing sheet (rulers, drill with A/B/C leader callouts, title-block table from the featured product spec) → category strip (jumps to and filters the catalogue) → 01 problems ledger → 02 method plates → 03 catalogue (sidebar index with live counts, search, native sort select, product hang tags with part numbers) → 04 inspection bay viewer + spec sheet → 05 process stations → 06 impact checklist (signal-orange section) → gallery conveyor → 07 work-order quote form → footer wordmark.
 
 ## Current build/test status
 
@@ -61,6 +65,26 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 - Real GPU devices and real touch hardware were not tested; SwiftShader is software WebGL.
 - No backend/API is present; quote form intentionally does not send data.
 
+## Blueprint redesign QA (2026-11-14, `feat/forgeworks-blueprint-redesign`)
+
+- Full art-direction and layout rebuild of the presentation layer; data (`lib/`), `DrillModel.tsx`, `ToolVisual.tsx` and all interactions kept.
+- Verified (headless Chromium + SwiftShader): 33/33 interaction checks incl. new category-strip filter and native sort select; no page-level horizontal overflow at 1440×900, 834×1112, 390×844; axe-core WCAG 2 A/AA: 0 violations at all three sizes; hero headline and footer wordmark measured to fit from 360 to 1920px. Evidence: `docs/qa/2026-11-14-blueprint/`.
+- The hero leader lines point at fixed zones while the drill auto-rotates; they are schematic, not tracked to the model.
+
+## AFRAH rebrand + office map (2026-11-14, `feat/forgeworks-blueprint-redesign`)
+
+- Client brand is **AFRAH – Alyasmeen Trading L.L.C**. Logo source: `~/Downloads/AFRAH-transparent.png` (white artwork; a 1px dark-red line on its left edge was removed). Derived web assets in `public/brand/`: `afrah-mark-ink.png` + `afrah-word-ink.png` (header, with the division name as HTML text for legibility) and `afrah-lockup-white.png` (footer).
+- `lib/site.ts` holds brand, contact and office settings. Empty values stay hidden: fill `contact.whatsapp` (digits incl. country code) to show the floating WhatsApp button and office WhatsApp row; `contact.phone`, `contact.email` and `contact.address` show their rows when set. Set `office.lat/lng` and `office.exact: true` for the real pin and the "Get directions" button; until then the map shows Dubai with an "exact office pin coming soon" flag.
+- Office map: `components/OfficeMap.tsx` (MapLibre GL + OpenFreeMap positron tiles, no API key, lazy-loaded near the viewport, static fallback without WebGL). OpenStreetMap/OpenMapTiles attribution must stay visible. Pattern copied from the Automan Star site's `ListingMap`.
+- Product names no longer carry the old "FW" prefix; catalogue part labels use `brand.code` (AF-…) and remain illustrative demo data.
+- Verified: 33/33 interactions, axe 0 violations (1440/834/390), no overflow, map renders at all three sizes; contact slots checked with dummy values (WhatsApp float + wa.me link, tel link, directions, exact pin) and then reverted to empty. Evidence: `docs/qa/2026-11-14-afrah-office/`.
+
+## Live link (2026-11-14)
+
+- Public URL: **https://afrah-alyasmeen-trading.vercel.app**. It is the production deployment of a separate Vercel project `afrah-alyasmeen-trading`, built from branch `feat/forgeworks-blueprint-redesign`. The old `industrial-tools-3d.vercel.app` project still serves the ForgeWorks build of `main` and was not changed.
+- `vercel.json` pins `"framework": "nextjs"`. Without it, a CLI-created project defaults to "Other" and the homepage returns 404.
+- This worktree's `.vercel/project.json` (git-ignored) now links to the AFRAH project. Redeploy with `vercel deploy --prod --yes`. There is no Git integration, so pushes do not auto-deploy.
+
 ## Known limitations / unfinished features
 
 - Drill geometry is an original stylized procedural concept. Refine proportions/materials and add more detailed motor vents, chuck teeth and housing seams if greater photorealism is needed.
@@ -75,7 +99,13 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 
 ## Asset licence checks
 
-No external 3D or product photo assets are bundled. The tool visuals and drill are original code-generated geometry/CSS. Google Fonts are loaded from their public CSS endpoint; confirm client hosting and font licence requirements before launch. Any later stock/product photography, HDRI or downloadable model added by Claude must have licence/usage rights documented and attribution included where required.
+No third-party 3D models, photos or HDRIs are bundled. Product images in `public/products/*.webp` are studio renders of original procedural three.js models written for this project (`scripts/render-products/models.js`), so they carry no external licence or brand. Openly licensed photo libraries were reviewed on 2026-11-14 and rejected because nearly all power-tool photos show other manufacturers' logos. Google Fonts (Archivo, JetBrains Mono, both SIL OFL) load from the public CSS endpoint; confirm client hosting requirements before launch. Any later stock photography or downloaded model must have its licence and attribution documented here.
+
+## Product image pipeline
+
+- `lib/products.ts` gives each product an optional `image` path; `components/ToolVisual.tsx` shows it in catalogue cards, the gallery and the product dialog, and falls back to the code-drawn silhouette when a product has no image or it fails to load.
+- To regenerate after editing `scripts/render-products/models.js`: from the repo root run `python3 -m http.server 4318`, then `node scripts/render-products/render.mjs <path-to-a-package.json-that-has-playwright>`. Raw PNGs land in `scripts/render-products/out/` (git-ignored); trim/centre them to 1000×750 WebP in `public/products/` (the 2026-11-14 export used Pillow, quality 82).
+- Replace the renders with client-approved photography when available by pointing `image` at the new files.
 
 ## Recommended refinement order
 
@@ -92,6 +122,6 @@ No external 3D or product photo assets are bundled. The tool visuals and drill a
 
 1. `components/DrillModel.tsx` — procedural model and OrbitControls.
 2. `components/Home.tsx` — page modules, state, GSAP and interaction wiring.
-3. `app/globals.css` — full design system and responsive behavior.
+3. `app/globals.css`, `app/sections.css`, `app/tool-art.css` — design system, sections and responsive behavior.
 4. `lib/products.ts` and `lib/site.ts` — editable demo catalogue and brand/contact/SEO configuration.
 5. `README.md` — install, run and architecture notes.
