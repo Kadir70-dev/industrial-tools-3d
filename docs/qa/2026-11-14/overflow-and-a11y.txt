@@ -1,0 +1,6 @@
+Horizontal overflow (scrollWidth vs clientWidth, offending elements):
+desktop {"sw":1440,"cw":1440,"wide":[],"canvas":2,"fallback":2} 
+tablet {"sw":834,"cw":834,"wide":[],"canvas":2,"fallback":2} 
+mobile {"sw":390,"cw":390,"wide":[],"canvas":2,"fallback":2} 
+
+axe-core 4.x WCAG 2 A/AA after fixes (each viewport): only color-contrast on 4 large brand-orange headline accents (#ef6c28 on #f4f1eb, 2.72:1).

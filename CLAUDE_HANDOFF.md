@@ -50,7 +50,15 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 - Fixed in QA: hero footer overlapping the CTAs; hero buttons wrapping on tablet; drill cropped on narrow canvases (camera zoom now adapts to canvas aspect); stray "0" in hero spec ruler; "01 — 01" solution indexes; unrendered ↘ glyph; empty grey cells in the 5-item impact grid (desktop and mobile); missing gap at the gallery loop seam; gallery count label (06 vs 8 items); gallery pause button being undone by hover-pause; both Canvases now stop rendering while off screen.
 - Interactions verified by script: gallery hover/button pause and seamless loop width, category filter, search empty state + clear, sort, product modal + Escape, viewer hotspot, mobile menu open/close.
 - Brand config: `siteConfig.brand.code` (index prefix) and `siteConfig.featuredProductId` drive the hero/viewer labels; the invented hero coordinates were removed — `contact.location` is shown only when set.
-- Source is pushed to the public GitHub repository on `main`; no deployment has been run.
+- Source is pushed to the public GitHub repository on `main`; production (https://industrial-tools-3d.vercel.app) serves `main` @594ca74.
+
+## Redesign branch QA (2026-11-14, `feat/dongcheng-inspired-redesign`, draft PR #1)
+
+- Branch adds the DongCheng-inspired product-first refresh (light header/hero, refined catalog/gallery) and a React error boundary that swaps the R3F drill for the static CSS drill when WebGL fails.
+- Fixed in this pass: desktop hero headline (1051–1440px) overlapped the 3D stage by 6–8px (font clamp reduced; now ≥19px clear); product modal now moves focus to Close, traps Tab, and returns focus to the opening card on close; ~90 small grey label contrast failures lifted to WCAG AA (`#5f6767` on light, `#8d9595` on dark; small step numbers `#b84c14`); 3D-only viewer controls and "Drag to rotate" hidden when the static fallback is shown.
+- Verified by script (headless Chromium + SwiftShader): 32/32 checks — WebGL canvases, 360° drag, zoom, reset, all three hotspots (topmost + toggle), nav anchors, category/search/empty state/sort, modal open/focus/Tab/Escape, gallery auto-move/hover pause/button pause/two equal passes infinite loop, mobile touch scroll, reduced-motion stop, form empty/invalid-email/valid local success, mobile menu, no page errors, WebGL-disabled fallback (`--disable-webgl --disable-3d-apis`) with page still usable. Log: `docs/qa/2026-11-14/interaction-results.txt`.
+- No horizontal overflow at 1440×900, 834×1112, 390×844; axe-core WCAG 2 A/AA leaves only the large brand-orange headline accents (2.72:1) — kept deliberately as brand identity. Screenshots: `docs/qa/2026-11-14/`.
+- Real GPU devices and real touch hardware were not tested; SwiftShader is software WebGL.
 - No backend/API is present; quote form intentionally does not send data.
 
 ## Known limitations / unfinished features
@@ -61,6 +69,7 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 - Mobile touch supports native horizontal swipe scrolling of the gallery, not custom pointer-gesture physics.
 - WebGL initialization fallback is a static CSS drill illustration. It is intentionally not animated or represented as 3D.
 - Product cards use CSS silhouettes. Replace with client-approved imagery or licensed models when available.
+- Brand orange `#ef6c28` on ivory is 2.72:1 — passes only as decorative/large display text under a lenient reading; a darker orange would be needed for strict AA on headline accents (client brand decision).
 - Google Fonts are loaded via CSS import; consider `next/font` self-hosting if deployment policy permits.
 - No individual product routes are included; the product details modal covers the initial catalog experience.
 
