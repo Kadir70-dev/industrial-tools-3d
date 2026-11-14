@@ -79,6 +79,12 @@ Page architecture: spec strip → sticky table-row header (indexed nav cells, ha
 - Product names no longer carry the old "FW" prefix; catalogue part labels use `brand.code` (AF-…) and remain illustrative demo data.
 - Verified: 33/33 interactions, axe 0 violations (1440/834/390), no overflow, map renders at all three sizes; contact slots checked with dummy values (WhatsApp float + wa.me link, tel link, directions, exact pin) and then reverted to empty. Evidence: `docs/qa/2026-11-14-afrah-office/`.
 
+## Live link (2026-11-14)
+
+- Public URL: **https://afrah-alyasmeen-trading.vercel.app**. It is the production deployment of a separate Vercel project `afrah-alyasmeen-trading`, built from branch `feat/forgeworks-blueprint-redesign`. The old `industrial-tools-3d.vercel.app` project still serves the ForgeWorks build of `main` and was not changed.
+- `vercel.json` pins `"framework": "nextjs"`. Without it, a CLI-created project defaults to "Other" and the homepage returns 404.
+- This worktree's `.vercel/project.json` (git-ignored) now links to the AFRAH project. Redeploy with `vercel deploy --prod --yes`. There is no Git integration, so pushes do not auto-deploy.
+
 ## Known limitations / unfinished features
 
 - Drill geometry is an original stylized procedural concept. Refine proportions/materials and add more detailed motor vents, chuck teeth and housing seams if greater photorealism is needed.
