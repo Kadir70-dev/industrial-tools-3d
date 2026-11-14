@@ -1,0 +1,47 @@
+/* Code-drawn product silhouettes, WebGL fallback drill, viewer hotspots and loader (carried over from the previous design). */
+.tool-art{--tool-tone:#ef6c28;width:190px;height:150px;position:relative;transition:transform .45s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 15px 9px #161a1c21)}
+.tool-art span{position:absolute;display:block}
+.art-body{width:86px;height:46px;left:42px;top:40px;background:var(--tool-tone);border-radius:14px 12px 11px 12px;transform:skew(-10deg);box-shadow:inset -9px -6px 0 #00000018}
+.art-motor{width:48px;height:39px;left:61px;top:43px;background:#282e30;border-radius:12px 5px 7px 10px}
+.art-grip{width:29px;height:62px;left:62px;top:76px;background:linear-gradient(90deg,#171b1d,#303638);border-radius:5px 7px 11px 12px;transform:rotate(-9deg)}
+.art-battery{width:53px;height:20px;left:50px;top:128px;background:var(--tool-tone);border-radius:4px 6px 9px 9px}
+.art-chuck{width:31px;height:23px;left:123px;top:50px;background:#737b7b;clip-path:polygon(0 15%,82% 0,100% 20%,100% 80%,82% 100%,0 85%)}
+.art-bit{height:5px;width:48px;left:150px;top:59px;background:#b8c0c0;clip-path:polygon(0 0,85% 0,100% 50%,85% 100%,0 100%)}
+.art-trigger{width:8px;height:20px;left:84px;top:74px;background:#fa9a62;border-radius:2px 2px 5px 5px;transform:rotate(-13deg)}
+.tool-art--driver .art-body{left:44px;top:39px}
+.tool-art--driver .art-grip{height:55px;top:73px}
+.tool-art--driver .art-battery{top:121px}
+.tool-art--grinder .art-disc{width:85px;height:85px;border:9px solid #858d8e;background:linear-gradient(135deg,#dce0df,#767f80);border-radius:50%;left:13px;top:35px;box-shadow:inset 0 0 0 2px #e5e7e5}
+.tool-art--grinder .art-motor{width:72px;height:39px;left:80px;top:56px;border-radius:6px;background:var(--tool-tone)}
+.tool-art--grinder .art-handle{width:23px;height:46px;left:132px;top:52px;border:5px solid #222829;border-left:0;border-radius:0 20px 20px 0}
+.tool-art--grinder .art-grip{height:26px;width:48px;left:90px;top:91px;transform:rotate(30deg)}
+.tool-art--saw .art-blade{width:77px;height:77px;border:8px solid #9ea5a4;border-radius:50%;left:55px;top:44px;background:repeating-conic-gradient(#c4c9c7 0 7deg,#7b8382 7deg 12deg);box-shadow:inset 0 0 0 12px #252a2b}
+.tool-art--saw .art-body{width:111px;height:39px;left:44px;top:40px;border-radius:10px;background:var(--tool-tone)}
+.tool-art--saw .art-grip{width:33px;height:48px;left:122px;top:43px;transform:rotate(-45deg)}
+.tool-art--saw .art-battery{top:120px;left:99px}
+.tool-art--hammer .art-hammer-head{width:76px;height:20px;background:#707a7b;left:47px;top:37px;border-radius:4px 3px 7px 7px;transform:rotate(-45deg)}
+.tool-art--hammer .art-hammer-handle{width:17px;height:101px;background:linear-gradient(90deg,#383f40,#d2d1c9,#262b2d);left:83px;top:47px;border-radius:8px;transform:rotate(42deg)}
+.tool-art--kit .art-case{width:132px;height:82px;background:#2e3436;border:5px solid #e57436;left:27px;top:50px;border-radius:6px;box-shadow:inset 0 0 0 2px #111}
+.tool-art--kit .art-case-handle{width:41px;height:12px;border:3px solid #343b3d;border-bottom:0;left:73px;top:39px;border-radius:8px 8px 0 0}
+.tool-art--kit .art-kit-tools{width:88px;height:40px;left:48px;top:71px;background:repeating-linear-gradient(90deg,#bdc3c2 0 4px,transparent 4px 11px);opacity:.8}
+.tool-art--bits .art-bitcase{width:105px;height:65px;left:42px;top:57px;background:#252b2d;border:5px solid #7d8685;border-radius:5px;transform:rotate(-10deg)}
+.tool-art--bits .art-bits-row{width:70px;height:34px;left:60px;top:71px;background:repeating-linear-gradient(90deg,#c5cac8 0 4px,transparent 4px 12px);z-index:1;transform:rotate(-10deg)}
+.tool-art--wrench .art-wrench{width:19px;height:108px;left:83px;top:33px;background:linear-gradient(90deg,#747d7d,#d6dcda,#687172);border-radius:10px;transform:rotate(42deg)}
+.tool-art--wrench .art-wrench-jaw{width:40px;height:37px;left:109px;top:29px;border:9px solid #aeb6b5;border-bottom:0;border-radius:28px 28px 0 0;transform:rotate(42deg)}
+.hotspot{position:absolute;background:transparent;border:0;color:var(--ivory);display:flex;align-items:center;gap:8px;font:8px var(--mono);letter-spacing:.07em;z-index:2}
+.hotspot i{width:9px;height:9px;border:1px solid var(--orange);border-radius:50%;box-shadow:0 0 0 4px #ef6c2824;background:var(--orange)}
+.hotspot span{background:#101315a6;padding:6px;opacity:0;transition:opacity .2s}
+.hotspot:hover span,.hotspot:focus-visible span{opacity:1}
+.hotspot--tracked{position:relative;transform:translate(-5px,-5px);white-space:nowrap;cursor:pointer}
+.hotspot.is-active span{opacity:1}
+.drill-fallback{height:100%;width:100%;position:relative;display:grid;place-items:center}
+.drill-fallback i{position:absolute;display:block}
+.drill-fallback__body{width:38%;height:25%;left:29%;top:31%;background:var(--orange);border-radius:18px;transform:skew(-10deg);box-shadow:inset -15px -10px 0 #0002}
+.drill-fallback__grip{width:15%;height:36%;left:42%;top:50%;background:#202526;border-radius:9px;transform:rotate(-10deg)}
+.drill-fallback__battery{width:25%;height:10%;left:36%;top:82%;background:var(--orange);border-radius:5px}
+.drill-fallback__chuck{width:14%;height:14%;left:64%;top:36%;background:#858c8b;clip-path:polygon(0 15%,82% 0,100% 20%,100% 80%,82% 100%,0 85%)}
+.drill-fallback__bit{width:20%;height:3%;left:77%;top:41%;background:#c5cccc;clip-path:polygon(0 0,85% 0,100% 50%,85% 100%,0 100%)}
+.model-loading{height:100%;display:flex;align-items:center;justify-content:center;gap:12px;color:#9ba2a0;font:10px var(--mono)}
+.loader-ring{width:18px;height:18px;border:1px solid #646d6e;border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tool-art--large{transform:scale(1.35)}

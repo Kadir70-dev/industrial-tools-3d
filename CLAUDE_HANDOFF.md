@@ -20,7 +20,9 @@ Navigation, footer, SEO metadata, modal, keyboard labels, empty states, reduced-
 
 - `app/page.tsx`: single homepage entry.
 - `app/layout.tsx`: metadata and global stylesheet.
-- `app/globals.css`: typography, responsive layout, visual system, CSS tool silhouettes, gallery animation and reduced-motion styles.
+- `app/globals.css`: design tokens, base type, buttons, header, hero drawing sheet and category strip.
+- `app/sections.css`: problems ledger, method plates, catalogue, inspection bay, stations, impact checklist, gallery conveyor, work-order form, footer and dialog.
+- `app/tool-art.css`: code-drawn product silhouettes, WebGL fallback drill, viewer hotspots and loader.
 - `components/Home.tsx`: client UI and interaction state; GSAP + ScrollTrigger reveal and intro animation.
 - `components/DrillModel.tsx`: client-side React Three Fiber scene using original primitive geometry and materials; Canvas auto-rotation for hero, OrbitControls for featured 360 viewer.
 - `components/ToolVisual.tsx`: reusable CSS silhouettes for category/product cards.
@@ -37,7 +39,9 @@ The drill is not an image. It is modeled from custom Three.js geometry: housing 
 
 ## CSS and motion system
 
-Palette variables live at the top of `app/globals.css`. Space Grotesk is used for display, DM Sans for body and DM Mono for technical labels. Warm ivory and deep graphite sections alternate; orange is reserved for functional emphasis. GSAP/ScrollTrigger handles entry reveals and hero intro; the hero camera subtly shifts with page scroll. CSS handles the product gallery, ticker, timeline, hover details and reduced-motion fallback.
+**Blueprint system (branch `feat/forgeworks-blueprint-redesign`, 2026-11-14).** The site reads as an engineering drawing / spec sheet rather than a marketing template: drafting paper `#ece9e2`, ink `#121210`, signal orange `#f2601e`; 0px corners, 2px ink rules, hard offset shadows, visible grids, coordinate rulers and hazard-stripe accents. Archivo (variable width axis; display at 62–75% stretch, weight 800–900) with JetBrains Mono for labels and specs. Headline accent words are ink-on-orange "tape" (`.tape`) so the brand orange never carries small or body text on paper. Small orange text uses `--signal-text` on paper and `--signal-on-ink` on dark. GSAP/ScrollTrigger handles reveals, the hero intro and the hero leader-line draw; CSS handles the gallery marquee + conveyor belt and reduced-motion fallbacks.
+
+Page architecture: spec strip → sticky table-row header (indexed nav cells, hazard-edged quote CTA) → hero drawing sheet (rulers, drill with A/B/C leader callouts, title-block table from the featured product spec) → category strip (jumps to and filters the catalogue) → 01 problems ledger → 02 method plates → 03 catalogue (sidebar index with live counts, search, native sort select, product hang tags with part numbers) → 04 inspection bay viewer + spec sheet → 05 process stations → 06 impact checklist (signal-orange section) → gallery conveyor → 07 work-order quote form → footer wordmark.
 
 ## Current build/test status
 
@@ -60,6 +64,12 @@ Palette variables live at the top of `app/globals.css`. Space Grotesk is used fo
 - No horizontal overflow at 1440×900, 834×1112, 390×844; axe-core WCAG 2 A/AA leaves only the large brand-orange headline accents (2.72:1) — kept deliberately as brand identity. Screenshots: `docs/qa/2026-11-14/`.
 - Real GPU devices and real touch hardware were not tested; SwiftShader is software WebGL.
 - No backend/API is present; quote form intentionally does not send data.
+
+## Blueprint redesign QA (2026-11-14, `feat/forgeworks-blueprint-redesign`)
+
+- Full art-direction and layout rebuild of the presentation layer; data (`lib/`), `DrillModel.tsx`, `ToolVisual.tsx` and all interactions kept.
+- Verified (headless Chromium + SwiftShader): 33/33 interaction checks incl. new category-strip filter and native sort select; no page-level horizontal overflow at 1440×900, 834×1112, 390×844; axe-core WCAG 2 A/AA: 0 violations at all three sizes; hero headline and footer wordmark measured to fit from 360 to 1920px. Evidence: `docs/qa/2026-11-14-blueprint/`.
+- The hero leader lines point at fixed zones while the drill auto-rotates; they are schematic, not tracked to the model.
 
 ## Known limitations / unfinished features
 
@@ -92,6 +102,6 @@ No external 3D or product photo assets are bundled. The tool visuals and drill a
 
 1. `components/DrillModel.tsx` — procedural model and OrbitControls.
 2. `components/Home.tsx` — page modules, state, GSAP and interaction wiring.
-3. `app/globals.css` — full design system and responsive behavior.
+3. `app/globals.css`, `app/sections.css`, `app/tool-art.css` — design system, sections and responsive behavior.
 4. `lib/products.ts` and `lib/site.ts` — editable demo catalogue and brand/contact/SEO configuration.
 5. `README.md` — install, run and architecture notes.
