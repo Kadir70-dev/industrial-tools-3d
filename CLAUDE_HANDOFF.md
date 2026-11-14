@@ -1,4 +1,4 @@
-# Claude handoff — ForgeWorks Industrial
+# Claude handoff — AFRAH Alyasmeen Trading L.L.C (formerly the ForgeWorks placeholder)
 
 ## Current build
 
@@ -70,6 +70,14 @@ Page architecture: spec strip → sticky table-row header (indexed nav cells, ha
 - Full art-direction and layout rebuild of the presentation layer; data (`lib/`), `DrillModel.tsx`, `ToolVisual.tsx` and all interactions kept.
 - Verified (headless Chromium + SwiftShader): 33/33 interaction checks incl. new category-strip filter and native sort select; no page-level horizontal overflow at 1440×900, 834×1112, 390×844; axe-core WCAG 2 A/AA: 0 violations at all three sizes; hero headline and footer wordmark measured to fit from 360 to 1920px. Evidence: `docs/qa/2026-11-14-blueprint/`.
 - The hero leader lines point at fixed zones while the drill auto-rotates; they are schematic, not tracked to the model.
+
+## AFRAH rebrand + office map (2026-11-14, `feat/forgeworks-blueprint-redesign`)
+
+- Client brand is **AFRAH – Alyasmeen Trading L.L.C**. Logo source: `~/Downloads/AFRAH-transparent.png` (white artwork; a 1px dark-red line on its left edge was removed). Derived web assets in `public/brand/`: `afrah-mark-ink.png` + `afrah-word-ink.png` (header, with the division name as HTML text for legibility) and `afrah-lockup-white.png` (footer).
+- `lib/site.ts` holds brand, contact and office settings. Empty values stay hidden: fill `contact.whatsapp` (digits incl. country code) to show the floating WhatsApp button and office WhatsApp row; `contact.phone`, `contact.email` and `contact.address` show their rows when set. Set `office.lat/lng` and `office.exact: true` for the real pin and the "Get directions" button; until then the map shows Dubai with an "exact office pin coming soon" flag.
+- Office map: `components/OfficeMap.tsx` (MapLibre GL + OpenFreeMap positron tiles, no API key, lazy-loaded near the viewport, static fallback without WebGL). OpenStreetMap/OpenMapTiles attribution must stay visible. Pattern copied from the Automan Star site's `ListingMap`.
+- Product names no longer carry the old "FW" prefix; catalogue part labels use `brand.code` (AF-…) and remain illustrative demo data.
+- Verified: 33/33 interactions, axe 0 violations (1440/834/390), no overflow, map renders at all three sizes; contact slots checked with dummy values (WhatsApp float + wa.me link, tel link, directions, exact pin) and then reverted to empty. Evidence: `docs/qa/2026-11-14-afrah-office/`.
 
 ## Known limitations / unfinished features
 

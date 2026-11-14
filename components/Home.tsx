@@ -1,7 +1,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, CircleHelp, Menu, Pause, Play, RotateCcw, Search, X, ZoomIn } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, CircleHelp, Mail, MapPin, Menu, MessageCircle, Navigation, Pause, Phone, Play, RotateCcw, Search, X, ZoomIn } from 'lucide-react';
 import { categories, products, type Product } from '@/lib/products';
 import ToolVisual from './ToolVisual';
 import type { Hotspot } from './DrillModel';
@@ -47,6 +47,11 @@ const hotspots: Hotspot[] = [
   { id: 'battery', index: '02', label: 'Battery detail', detail: '18V battery platform', position: [.1, -.98, .41] },
   { id: 'chuck', index: '03', label: 'Chuck detail', detail: 'Metal keyless chuck', position: [1.09, .42, .26] },
 ];
+const OfficeMap = dynamic(() => import('./OfficeMap'), { ssr: false, loading: () => <div className="office-map is-idle"><div className="office-map-skeleton" /></div> });
+const { contact, office } = siteConfig;
+const digits = (v: string) => v.replace(/\D/g, '');
+const whatsappHref = contact.whatsapp ? `https://wa.me/${digits(contact.whatsapp)}?text=${encodeURIComponent(`Hello ${siteConfig.brand.name}, I'd like to ask about your tools.`)}` : '';
+const directionsHref = office.exact ? `https://www.google.com/maps/dir/?api=1&destination=${office.lat},${office.lng}` : '';
 const galleryProducts = [products[0], products[1], products[2], products[4], products[6], products[3], products[7], products[5]];
 const countFor = (c: string) => (c === 'All tools' ? products.length : products.filter(p => p.category === c).length);
 
@@ -141,11 +146,16 @@ export default function Home() {
 
   return <main>
     <a className="skip-link" href="#collection">Skip to the catalogue</a>
-    <div className="spec-strip" aria-hidden="true"><span>{brand.name.toUpperCase()} {brand.division.toUpperCase()}</span><span>PROFESSIONAL HARDWARE CATALOGUE</span><span>DEMO BRAND · CONTENT EDITABLE</span></div>
+    <div className="spec-strip" aria-hidden="true"><span>{brand.name.toUpperCase()} {brand.division.toUpperCase()}</span><span>PROFESSIONAL HARDWARE CATALOGUE</span><span>CATALOGUE DATA IS ILLUSTRATIVE</span></div>
     <header className="site-header">
       <a className="brand" href="#top" aria-label={`${brand.name} ${brand.division} home`}>
-        <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
-        <span className="brand-word">{brand.name.toUpperCase()}<span className="brand-sub">{brand.division.toUpperCase()}</span></span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="brand-mark-img" src={brand.logo.markInk} alt="" width={145} height={160} />
+        <span className="brand-text">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="brand-word-img" src={brand.logo.wordInk} alt={brand.name} width={345} height={96} />
+          <span className="brand-sub">{brand.division}</span>
+        </span>
       </a>
       <nav className={menuOpen ? 'nav nav--open' : 'nav'} aria-label="Main navigation">
         {navLinks.map(([href, label, n]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}><span className="nav-index">{n}</span>{label}</a>)}
@@ -382,14 +392,44 @@ export default function Home() {
       </div>
     </section>
 
+    <section className="office" id="office" aria-labelledby="office-title">
+      <div className="wrap office-grid">
+        <div className="office-card reveal">
+          <SectionTag n="08">Visit the office</SectionTag>
+          <h2 id="office-title">Come and see <Tape>the tools.</Tape></h2>
+          <dl className="spec-sheet spec-sheet--light office-details">
+            <div><dt><MapPin size={14} aria-hidden="true" /> Address</dt><dd>{contact.address || <>{office.city}<span className="office-pending">Full address coming soon</span></>}</dd></div>
+            {contact.phone && <div><dt><Phone size={14} aria-hidden="true" /> Phone</dt><dd><a href={`tel:+${digits(contact.phone)}`}>{contact.phone}</a></dd></div>}
+            {contact.whatsapp && <div><dt><MessageCircle size={14} aria-hidden="true" /> WhatsApp</dt><dd><a href={whatsappHref} target="_blank" rel="noopener noreferrer">{contact.whatsapp}</a></dd></div>}
+            {contact.email && <div><dt><Mail size={14} aria-hidden="true" /> Email</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></div>}
+          </dl>
+          <div className="featured-actions">
+            {directionsHref && <a className="btn btn--signal" href={directionsHref} target="_blank" rel="noopener noreferrer">Get directions <Navigation size={18} aria-hidden="true" /></a>}
+            {whatsappHref && <a className="btn btn--ghost" href={whatsappHref} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <MessageCircle size={18} aria-hidden="true" /></a>}
+            <a className="btn btn--ghost" href="#contact">Send an enquiry <ArrowUpRight size={18} aria-hidden="true" /></a>
+          </div>
+        </div>
+        <div className="office-frame reveal">
+          <div className="bay-head bay-head--light"><span>Location / {office.exact ? 'Office' : office.city}</span><span>{office.exact ? `${office.lat.toFixed(4)}°N ${office.lng.toFixed(4)}°E` : 'Pin pending'}</span></div>
+          <OfficeMap />
+        </div>
+      </div>
+    </section>
+
     <footer className="footer">
       <div className="wrap footer-top">
-        <p>Professional hardware.<br />A more considered way to choose.</p>
-        <div className="footer-links"><a href="#collection">Tools</a><a href="#approach">Approach</a><a href="#impact">Why {brand.name}</a><a href="#contact">Contact</a><a href="#top">Back to top ↑</a></div>
+        <div className="footer-brand">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="footer-logo" src={brand.logo.lockupWhite} alt={`${brand.name} ${brand.division}`} width={570} height={200} loading="lazy" />
+          <p>Professional hardware.<br />A more considered way to choose.</p>
+        </div>
+        <div className="footer-links"><a href="#collection">Tools</a><a href="#approach">Approach</a><a href="#impact">Why {brand.name}</a><a href="#contact">Contact</a><a href="#office">Office</a><a href="#top">Back to top ↑</a></div>
       </div>
       <div className="wordmark" data-word={brand.name.toUpperCase()} aria-hidden="true" />
-      <div className="wrap footer-base"><span>© 2026 {brand.name} {brand.division} — demo brand</span><span>Built around the work.</span></div>
+      <div className="wrap footer-base"><span>© 2026 {brand.name} {brand.division}</span><span>Built around the work.</span></div>
     </footer>
+
+    {whatsappHref && <a className="wa-float" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label={`Chat with ${brand.name} on WhatsApp`}><MessageCircle size={26} aria-hidden="true" /></a>}
 
     {selected && <div className="modal-backdrop" role="presentation" onMouseDown={e => { if (e.target === e.currentTarget) setSelected(null); }}>
       <section className="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">

@@ -1,0 +1,34 @@
+PASS WebGL canvases render (hero + viewer) [{"w":660,"h":666},{"w":686,"h":600}]
+PASS Static fallback hidden when WebGL works visible=0
+PASS Nav "Tools" scrolls to #collection top=80 (header 74px)
+PASS Nav "Our approach" scrolls to #approach top=80 (header 74px)
+PASS Nav "Contact" scrolls to #contact top=80 (header 74px)
+PASS 360° drag rotates viewer 
+PASS Zoom control changes framing 
+PASS Reset control works (no error) 
+PASS Hotspots present count=3
+PASS Visible hotspots clickable clicked=3
+PASS Category filter all=8 filtered=1 tabs=8
+PASS Search filters grinder→1
+PASS Search empty state 
+PASS Sort Name A–Z 125 Angle Grinder | 185 Circular Saw | 18V Compact Drill
+PASS Category strip filters catalogue cards=1 active=Grinders 01
+PASS Product detail modal opens + focus moves inside focus inside=true
+PASS Tab focus stays in modal 
+PASS Modal closes on Escape + focus returns to card 
+PASS Gallery auto-moves -554.4→-589.4
+PASS Gallery pauses on hover 
+PASS Gallery pause button 
+PASS Viewer controls shown with WebGL flex,block
+PASS Gallery seamless loop (two equal passes, infinite) {"sets":2,"w0":2240,"w1":2240,"anim":"marquee","iter":"infinite"}
+PASS Form blocks empty submit (native validation) name,email,interest,message,checkbox
+PASS Form rejects invalid email 
+PASS Valid form shows local success state 
+PASS No page errors (desktop) 
+PASS Mobile menu opens / closes on link aria-expanded=true
+PASS Mobile gallery touch-scrollable {"ox":"auto","touch":"pan-x","canScroll":true,"moved":250,"anim":"none","pageSW":390}
+PASS Reduced motion stops gallery none
+PASS Static fallback appears without WebGL visibleFallbacks=2 webglAvailable=false pageErrors=0
+PASS 3D-only viewer controls hidden without WebGL none,none
+PASS Page still usable without WebGL cards=8
+SUMMARY 33/33

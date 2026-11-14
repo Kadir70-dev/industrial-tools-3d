@@ -257,3 +257,40 @@
 .product-hitarea:hover .product-photo, .gallery-item:hover .product-photo { transform: scale(1.05) rotate(-2deg); }
 .gallery-visual .product-photo { padding: 8px; }
 .modal-art .product-photo--large { position: absolute; inset: 40px 24px 24px; width: calc(100% - 48px); height: calc(100% - 64px); }
+
+/* 08 Office map */
+.office { padding: clamp(72px, 9vw, 136px) 0; border-top: 2px solid var(--ink); }
+.office-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 72px); align-items: stretch; }
+.office-card { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+.office-card h2 { font-size: clamp(48px, 5.6vw, 92px); }
+.office-details dt { display: inline-flex; align-items: center; gap: 8px; }
+.office-details dd a { border-bottom: 2px solid var(--signal); }
+.office-pending { display: block; margin-top: 4px; font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--signal-text); }
+.office-frame { display: flex; flex-direction: column; min-height: 460px; }
+.bay-head--light { color: var(--steel); border-bottom-color: var(--rule); }
+.office-map { position: relative; flex: 1; min-height: 420px; margin-top: 16px; border: 2px solid var(--ink); background: var(--card); box-shadow: 8px 8px 0 var(--ink); overflow: hidden; }
+.office-map .office-map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.office-map-skeleton { position: absolute; inset: 0; background-color: var(--card); background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px); background-size: 32px 32px; }
+.office-map--static { display: grid; place-items: center; align-content: center; gap: 10px; font: 700 13px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.office-map-flag { position: absolute; left: 12px; top: 12px; max-width: calc(100% - 80px); z-index: 2; padding: 8px 12px; background: var(--ink); color: var(--paper); font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.office-pin { width: 22px; height: 22px; background: var(--signal); border: 3px solid var(--ink); transform: rotate(45deg); box-shadow: 0 0 0 8px rgba(242, 96, 30, .25); }
+.office-map .maplibregl-ctrl-group { border-radius: 0; border: 2px solid var(--ink); box-shadow: none; }
+.office-map .maplibregl-ctrl-group button { width: 40px; height: 40px; }
+
+/* WhatsApp button (shown only when siteConfig.contact.whatsapp is set) */
+.wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 45; width: 60px; height: 60px; display: grid; place-items: center; background: #25d366; color: var(--ink); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: transform .16s, box-shadow .16s; }
+.wa-float:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+
+/* Footer brand */
+.footer-brand { display: flex; flex-direction: column; gap: 20px; }
+.footer-logo { display: block; height: 72px; width: auto; }
+
+@media (max-width: 900px) {
+  .office-grid { grid-template-columns: 1fr; }
+  .office-map { min-height: 360px; }
+}
+@media (max-width: 560px) {
+  .office-map { box-shadow: 5px 5px 0 var(--ink); }
+  .footer-logo { height: 56px; }
+  .wa-float { right: 14px; bottom: 14px; width: 54px; height: 54px; }
+}
