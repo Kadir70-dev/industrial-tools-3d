@@ -85,7 +85,13 @@ Page architecture: spec strip → sticky table-row header (indexed nav cells, ha
 
 ## Asset licence checks
 
-No external 3D or product photo assets are bundled. The tool visuals and drill are original code-generated geometry/CSS. Google Fonts are loaded from their public CSS endpoint; confirm client hosting and font licence requirements before launch. Any later stock/product photography, HDRI or downloadable model added by Claude must have licence/usage rights documented and attribution included where required.
+No third-party 3D models, photos or HDRIs are bundled. Product images in `public/products/*.webp` are studio renders of original procedural three.js models written for this project (`scripts/render-products/models.js`), so they carry no external licence or brand. Openly licensed photo libraries were reviewed on 2026-11-14 and rejected because nearly all power-tool photos show other manufacturers' logos. Google Fonts (Archivo, JetBrains Mono, both SIL OFL) load from the public CSS endpoint; confirm client hosting requirements before launch. Any later stock photography or downloaded model must have its licence and attribution documented here.
+
+## Product image pipeline
+
+- `lib/products.ts` gives each product an optional `image` path; `components/ToolVisual.tsx` shows it in catalogue cards, the gallery and the product dialog, and falls back to the code-drawn silhouette when a product has no image or it fails to load.
+- To regenerate after editing `scripts/render-products/models.js`: from the repo root run `python3 -m http.server 4318`, then `node scripts/render-products/render.mjs <path-to-a-package.json-that-has-playwright>`. Raw PNGs land in `scripts/render-products/out/` (git-ignored); trim/centre them to 1000×750 WebP in `public/products/` (the 2026-11-14 export used Pillow, quality 82).
+- Replace the renders with client-approved photography when available by pointing `image` at the new files.
 
 ## Recommended refinement order
 
